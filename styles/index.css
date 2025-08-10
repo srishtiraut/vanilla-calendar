@@ -6,17 +6,17 @@
 @import "./month-calendar.css";
 @import "./event-list.css";
 @import "./event.css";
+@import "./week-calendar.css";
 
 
-
-*{
+* {
     font-family: ui-sans-serif, system-ui, sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-size: 16px;
     line-height: 1.5;
     color: var(--color-text-dark);
@@ -43,29 +43,33 @@ body{
 
     --color-gray-100: #f3f4f6;
     --color-gray-300: #d1d5db;
+    --color-gray-500: #6b7280;
 
     --color-white: #ffffff;
-    
+
     --color-text-light: #f9fafb;
     --color-text-dark: #030712;
+
+    --box-shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 
+    0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
-.app{
+.app {
     height: 100vh;
 }
 
-.main{
+.main {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.calendar{
+.calendar {
     height: 100%;
 }
 
-@media (min-width: 768px){
-    .app{
+@media (min-width: 768px) {
+    .app {
         display: grid;
         grid-template-columns: auto 1fr;
     }
