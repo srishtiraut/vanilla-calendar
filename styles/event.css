@@ -1,4 +1,4 @@
-.event{
+.event {
     width: 100%;
     display: block;
     font-size: var(--font-size-xs);
@@ -15,12 +15,12 @@
     cursor: pointer;
 }
 
-.event--filled{
+.event--filled {
     background-color: var(--color-blue-600);
     color: var(--color-text-light);
 }
 
-.event--dynamic{
+.event--dynamic {
     position: absolute;
     top: 12.5%;
     right: 0;
@@ -36,7 +36,7 @@
 
 }
 
-.event__color{
+.event__color {
     display: inline-block;
     border-radius: 50%;
     width: 0.5rem;
@@ -45,6 +45,17 @@
     margin-right: 0.25rem;
 }
 
-.event--filled .event__color{
+.event--filled .event__color {
     display: none;
+}
+
+.event__time {
+    display: none;
+}
+
+.event--dynamic .event__time {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
