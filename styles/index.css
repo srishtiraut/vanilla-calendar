@@ -9,6 +9,9 @@
 @import "./week-calendar.css";
 @import "./scroll.css";
 @import "./dialog.css";
+@import "./form.css";
+@import "./input.css";
+@import "./color-select.css";
 
 
 * {
