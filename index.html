@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="/styles/index.css">
 
-    <script src="/scripts/index.js" type="module"></script>
+    <!-- <script src="/scripts/index.js" type="module"></script> -->
 
     <title>Srishti's Vanilla Calendar</title>
 </head>
@@ -1533,7 +1533,7 @@
 
     <!-- EVENT DIALOG BOX: Used for creating new event -->
     <dialog class="dialog" data-dialog="event-form">
-        <form class="form">
+        <form class="form" data-event-form>
             <div class="dialog__wrapper">
                 <!-- Dialog box HEADER -->
                 <div class="dialog__header">
@@ -1758,7 +1758,7 @@
                         <button class="button button--secondary" type="button" data-dialog-close-button>
                             Cancel
                         </button>
-                        <button class="button button--primary" type="button">
+                        <button class="button button--primary" type="submit">
                             Save
                         </button>
                     </div>
@@ -1766,6 +1766,7 @@
             </div>
         </form>
     </dialog>
+    <script src="/scripts/index.js" type="module"></script>
 </body>
 
 
