@@ -2,7 +2,7 @@ import { validateEvent } from "./event.js";
 
 
 
-export function initEventForm() {
+export function initEventForm(toaster) {
     const formElement = document.querySelector("[data-event-form]");
 
     formElement.addEventListener("submit", (event) => {
@@ -12,7 +12,8 @@ export function initEventForm() {
         const formEvent = formIntoEvent(formElement);
         const validationError = validateEvent(formEvent);
         if (validationError !== null) {
-            alert(validationError);
+            // alert(validationError);
+            toaster.error(validationError);
             return;
         }
 
