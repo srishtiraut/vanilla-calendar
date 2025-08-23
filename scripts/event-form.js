@@ -1,10 +1,27 @@
+import { validateEvent } from "./event.js";
+
+
+
 export function initEventForm() {
     const formElement = document.querySelector("[data-event-form]");
 
     formElement.addEventListener("submit", (event) => {
         event.preventDefault();
+
+        // Convert form to event and validate it
         const formEvent = formIntoEvent(formElement);
-        console.log(formEvent);
+        const validationError = validateEvent(formEvent);
+        if (validationError !== null) {
+            alert(validationError);
+            return;
+        }
+
+        formElement.dispatchEvent(new CustomEvent('event-create', {
+            detail: {
+                event: formEvent
+            },
+            bubbles: true
+        }));
 
     });
 
