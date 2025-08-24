@@ -7,8 +7,8 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 export function initNav() {
     const todayButtonElements = document.querySelectorAll("[data-nav-today-button]");
-    const previousButtonElements = document.querySelectorAll("[data-nav-previous-button]");
-    const nextButtonElements = document.querySelector("[data-nav-next-button]");
+    const previousButtonElement = document.querySelector("[data-nav-previous-button]");
+    const nextButtonElement = document.querySelector("[data-nav-next-button]");
     const dateElement = document.querySelector("[data-nav-date]");
 
     let selectedView = "month";
@@ -26,21 +26,34 @@ export function initNav() {
     }
 
     previousButtonElement.addEventListener("click", () => {
+        const newDate = getPreviousDate(selectedView, selectedDate);
+        selectedDate = newDate;
         previousButtonElement.dispatchEvent(new CustomEvent("date-change", {
             detail: {
-                date: getPreviousDate(selectedView, selectedDate)
+                date: newDate
             },
             bubbles: true
         }));
     });
 
     nextButtonElement.addEventListener("click", () => {
+        const newDate = getNextDate(selectedView, selectedDate);
+        selectedDate = newDate;
         nextButtonElement.dispatchEvent(new CustomEvent("date-change", {
             detail: {
-                date: getNextDate(selectedView, selectedDate)
+                date: newDate
             },
             bubbles: true
         }));
+    });
+
+    document.addEventListener("view-change", (event) => {
+        selectedView = event.detail.view;
+    });
+
+    document.addEventListener("date-change", (event) => {
+        selectedDate = event.detail.date;
+        refreshDateElement(dateElement, selectedDate);
     });
 
     refreshDateElement(dateElement, selectedDate);
