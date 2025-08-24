@@ -1,29 +1,37 @@
-export function initCalendar() {
-    // const monthCalendarElement = document.querySelector("[data-month-calendar]");
-    // const weekCalendarEvent = document.querySelector("[data-week-calendar]");
-    // const dayCalendarEvent = document.querySelector("[data-day-calendar]");
+import { today } from './date.js';
+import { initMonthCalendar } from './month-calendar.js';
 
+export function initCalendar() {
     const calendarElement = document.querySelector("[data-calendar]");
+
+    let selectedView = "month";
+    let selectedDate = today();
+
+    function refreshCalendar() {
+        //show month calendar when selectedView == month
+        if (selectedView === "month") {
+            initMonthCalendar(calendarElement, selectedDate);
+        } else if (selectedView === "week") {
+            monthCalendarElement.style.display = "none";
+            weekCalendarEvent.style.display = "flex";
+            dayCalendarEvent.style.display = "none";
+        } else {
+            monthCalendarElement.style.display = "none";
+            weekCalendarEvent.style.display = "none";
+            dayCalendarEvent.style.display = "flex";
+        }
+    }
 
     document.addEventListener("view-change",
         (event) => {
-            const selectedView = event.detail.view;
-
-            //show month calendar when selectedView == month
-            if (selectedView === "month") {
-                monthCalendarElement.style.display = "flex";
-                weekCalendarEvent.style.display = "none";
-                dayCalendarEvent.style.display = "none";
-            } else if (selectedView === "week") {
-                monthCalendarElement.style.display = "none";
-                weekCalendarEvent.style.display = "flex";
-                dayCalendarEvent.style.display = "none";
-            } else {
-                monthCalendarElement.style.display = "none";
-                weekCalendarEvent.style.display = "none";
-                dayCalendarEvent.style.display = "flex";
-            }
-
+            selectedView = event.detail.view;
+            refreshCalendar();
         });
 
+    document.addEventListener("date-change", (event) => {
+        selectedDate = event.detail.date;
+        refreshCalendar();
+    });
+
+    refreshCalendar();
 }
