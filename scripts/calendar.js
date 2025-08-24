@@ -1,7 +1,9 @@
 export function initCalendar() {
-    const monthCalendarElement = document.querySelector("[data-month-calendar]");
-    const weekCalendarEvent = document.querySelector("[data-week-calendar]");
-    const dayCalendarEvent = document.querySelector("[data-day-calendar]");
+    // const monthCalendarElement = document.querySelector("[data-month-calendar]");
+    // const weekCalendarEvent = document.querySelector("[data-week-calendar]");
+    // const dayCalendarEvent = document.querySelector("[data-day-calendar]");
+
+    const calendarElement = document.querySelector("[data-calendar]");
 
     document.addEventListener("view-change",
         (event) => {
