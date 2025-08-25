@@ -8,17 +8,16 @@ export function initCalendar() {
     let selectedDate = today();
 
     function refreshCalendar() {
+
+        calendarElement.replaceChildren();
+
         //show month calendar when selectedView == month
         if (selectedView === "month") {
             initMonthCalendar(calendarElement, selectedDate);
         } else if (selectedView === "week") {
-            monthCalendarElement.style.display = "none";
-            weekCalendarEvent.style.display = "flex";
-            dayCalendarEvent.style.display = "none";
+            
         } else {
-            monthCalendarElement.style.display = "none";
-            weekCalendarEvent.style.display = "none";
-            dayCalendarEvent.style.display = "flex";
+            
         }
     }
 
