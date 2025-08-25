@@ -1,4 +1,4 @@
-import { generateMonthCalendarDays } from "./date.js";
+import { generateMonthCalendarDays, today, isTheSameDay } from "./date.js";
 
 const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");
 
@@ -33,6 +33,10 @@ function initCalendarDay(parent, calendarDay) {
     const calendarDayContent = calendarDayTemplateElement.content.cloneNode(true);
     const calendarDayElement = calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement = calendarDayContent.querySelector("[data-month-calendar-day-label]");
+
+    if(isTheSameDay(today(), calendarDay)){
+        calendarDayElement.classList.add("month-calendar__day--highlight");
+    }
 
     calendarDayLabelElement.textContent = calendarDay.getDate();
 
