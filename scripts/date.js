@@ -45,20 +45,36 @@ export function subtractDays(date, days) {
     return addDays(date, -days);
 }
 
-export function generateMonthCalendarDays(currentDate){
+export function generateMonthCalendarDays(currentDate) {
     const calendarDays = [];
 
     const lastDayofPreviousMonthDate = getLastDayOfMonthDate(subtractMonths(currentDate, 1));
 
-    const lastDayofPreviousMonthWeekDay
- = lastDayofPreviousMonthDate.getDay();
+    const lastDayofPreviousMonthWeekDay = lastDayofPreviousMonthDate.getDay();
 
- if(lastDayofPreviousMonthWeekDay !== 6){
-    for(let i=lastDayofPreviousMonthWeekDay; i>=0; i-=1){
-        const calendarDay = subtractDays(lastDayofPreviousMonthDate, i);
+    if (lastDayofPreviousMonthWeekDay !== 6) {
+        for (let i = lastDayofPreviousMonthWeekDay; i >= 0; i -= 1) {
+            const calendarDay = subtractDays(lastDayofPreviousMonthDate, i);
+            calendarDays.push(calendarDay);
+        }
+    }
+
+    const lastDayofCurrentMonthDate = getLastDayOfMonthDate(currentDate);
+    for (let i = 1; i <= lastDayofCurrentMonthDate.getDate(); i += 1) {
+        const calendarDay = addDays(lastDayofPreviousMonthDate, i);
         calendarDays.push(calendarDay);
     }
- }
+
+    const totalWeeks = Math.ceil(calendarDays.length / 7);
+    const totalDays = totalWeeks * 7;
+    const missingDayAmount = totalDays - calendarDays.length;
+
+    for (let i = 1; i <= missingDayAmount; i += 1) {
+        const calendarDay = addDays(lastDayofCurrentMonthDate, i);
+        calendarDays.push(calendarDay);
+
+    }
+
     return calendarDays;
 }
 

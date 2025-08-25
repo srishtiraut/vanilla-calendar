@@ -4,14 +4,24 @@ const calendarTemplateElement = document.querySelector("[data-template='month-ca
 
 const calendarDayTemplateElement = document.querySelector("[data-template='month-calendar-day']");
 
+const calendarWeekClasses = {
+    4: "four-week",
+    5: "five-week",
+    6: "six-week"
+};
+
 export function initMonthCalendar(parent, selectedDate) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
     const calendarElement = calendarContent.querySelector("[data-month-calendar]");
     const calendarDayListElement = calendarElement.querySelector("[data-month-calendar-day-list]");
 
     const calendarDays = generateMonthCalendarDays(selectedDate);
+    const calendarWeeks = calendarDays / 7;
 
-    for(const calendarDay of calendarDays){
+    const calendarWeekClass = calendarWeekClasses[calendarWeeks];
+    calendarElement.classList.add(calendarWeekClass);
+
+    for (const calendarDay of calendarDays) {
         initCalendarDay(calendarDayListElement, calendarDay);
     }
 
@@ -19,7 +29,7 @@ export function initMonthCalendar(parent, selectedDate) {
 
 }
 
-function initCalendarDay(parent, calendarDay){
+function initCalendarDay(parent, calendarDay) {
     const calendarDayContent = calendarDayTemplateElement.content.cloneNode(true);
     const calendarDayElement = calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement = calendarDayContent.querySelector("[data-month-calendar-day-label]");
