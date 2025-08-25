@@ -10,7 +10,7 @@ const calendarWeekClasses = {
     6: "six-week"
 };
 
-export function initMonthCalendar(parent, selectedDate) {
+export function initMonthCalendar(parent, selectedDate, eventStore) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
     const calendarElement = calendarContent.querySelector("[data-month-calendar]");
     const calendarDayListElement = calendarElement.querySelector("[data-month-calendar-day-list]");
@@ -22,6 +22,11 @@ export function initMonthCalendar(parent, selectedDate) {
     calendarElement.classList.add(calendarWeekClass);
 
     for (const calendarDay of calendarDays) {
+
+        const events = eventStore.getEventsByDate(calendarDay);
+        console.log(events);
+
+
         initCalendarDay(calendarDayListElement, calendarDay);
     }
 
@@ -34,7 +39,7 @@ function initCalendarDay(parent, calendarDay) {
     const calendarDayElement = calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement = calendarDayContent.querySelector("[data-month-calendar-day-label]");
 
-    if(isTheSameDay(today(), calendarDay)){
+    if (isTheSameDay(today(), calendarDay)) {
         calendarDayElement.classList.add("month-calendar__day--highlight");
     }
 

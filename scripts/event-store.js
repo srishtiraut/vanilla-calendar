@@ -1,3 +1,6 @@
+import { isTheSameDay } from "./date.js";
+
+
 export function initEventStore() {
     document.addEventListener("event-create", (event) => {
         const createdEvent = event.detail.event;
@@ -7,6 +10,15 @@ export function initEventStore() {
         saveEventIntoLocalStorage(events);
 
     });
+
+    return {
+        getEventsByDate(date){
+            const events = getEventsFromLocalStorage();
+            const filteredEvents = events.filter((event)=>isTheSameDay(event.date, date));
+
+            return filteredEvents;
+        }
+    }
 }
 
 
