@@ -1,4 +1,6 @@
 import { generateMonthCalendarDays, today, isTheSameDay } from "./date.js";
+import { initEventList } from "./event-list.js";
+
 
 const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");
 
@@ -22,19 +24,20 @@ export function initMonthCalendar(parent, selectedDate, eventStore) {
     calendarElement.classList.add(calendarWeekClass);
 
     for (const calendarDay of calendarDays) {
-
         const events = eventStore.getEventsByDate(calendarDay);
+
+
         console.log(events);
 
 
-        initCalendarDay(calendarDayListElement, calendarDay);
+        initCalendarDay(calendarDayListElement, calendarDay, events);
     }
 
     parent.appendChild(calendarElement);
 
 }
 
-function initCalendarDay(parent, calendarDay) {
+function initCalendarDay(parent, calendarDay, events) {
     const calendarDayContent = calendarDayTemplateElement.content.cloneNode(true);
     const calendarDayElement = calendarDayContent.querySelector("[data-month-calendar-day]");
     const calendarDayLabelElement = calendarDayContent.querySelector("[data-month-calendar-day-label]");
@@ -44,6 +47,8 @@ function initCalendarDay(parent, calendarDay) {
     }
 
     calendarDayLabelElement.textContent = calendarDay.getDate();
+
+    initEventList(calendarDayElement, events);
 
     parent.appendChild(calendarDayElement);
 }
