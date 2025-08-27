@@ -9,6 +9,11 @@ export function initEventStore() {
 
         saveEventIntoLocalStorage(events);
 
+        document.dispatchEvent(new CustomEvent('events-change', {
+            bubbles: true
+        })
+        );
+
     });
 
     return {

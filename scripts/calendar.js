@@ -32,5 +32,9 @@ export function initCalendar(eventStore) {
         refreshCalendar();
     });
 
+    document.addEventListener("events-change", ()=>{
+        refreshCalendar();
+    });
+
     refreshCalendar();
 }
