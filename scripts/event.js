@@ -3,6 +3,11 @@ const eventTemplateElement = document.querySelector("[data-template='event']");
 
 export function initStaticEvent(parent, event) {
     const eventElement = initEvent(event);
+
+    if(isEventAllDay(event)){
+        eventElement.classList.add("event--filled");
+    }
+
     parent.appendChild(eventElement);
 
 }
@@ -20,6 +25,13 @@ function initEvent(event) {
 
 }
 
+export function isEventAllDay(event){
+    return event.startTime === 0 && event.endTime === 1440;
+}
+
+export function eventStartsBefore(eventA, eventB) {
+    return eventA.startTime < eventB.startTime;
+}
 
 export function validateEvent(event) {
     if (event.startTime >= event.endTime) {
@@ -27,3 +39,5 @@ export function validateEvent(event) {
     }
     return null;
 }
+
+
