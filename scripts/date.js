@@ -84,6 +84,18 @@ export function isTheSameDay(dateA, dateB){
     && dateA.getDate() === dateB.getDate();
 }
 
+export function generateWeekDays(date){
+    const weekDays = [];
+    const firstWeekDay = subtractDays(date, date.getDay());
+
+    for(let i=0; i<=6; i++){
+        const weekDay = addDays(firstWeekDay, i);
+        weekDays.push(weekDay);
+    }
+
+    return weekDays;
+}
+
 function getLastDayOfMonthDate(date) {
     return new Date(
         date.getFullYear(),

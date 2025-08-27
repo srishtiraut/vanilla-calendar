@@ -1,5 +1,6 @@
 import { today } from './date.js';
 import { initMonthCalendar } from './month-calendar.js';
+import { initWeekCalendar } from './week-calendar.js';
 
 export function initCalendar(eventStore) {
     const calendarElement = document.querySelector("[data-calendar]");
@@ -15,9 +16,9 @@ export function initCalendar(eventStore) {
         if (selectedView === "month") {
             initMonthCalendar(calendarElement, selectedDate, eventStore);
         } else if (selectedView === "week") {
-            
+            initWeekCalendar(calendarElement, selectedDate, eventStore);
         } else {
-            
+
         }
     }
 
@@ -32,7 +33,7 @@ export function initCalendar(eventStore) {
         refreshCalendar();
     });
 
-    document.addEventListener("events-change", ()=>{
+    document.addEventListener("events-change", () => {
         refreshCalendar();
     });
 

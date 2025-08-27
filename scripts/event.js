@@ -13,6 +13,7 @@ export function initStaticEvent(parent, event) {
 }
 
 function initEvent(event) {
+    
     const eventContent = eventTemplateElement.content.cloneNode(true);
     const eventElement = eventContent.querySelector("[data-event]");
     const eventTitleElement = eventElement.querySelector("[data-event-title]");
