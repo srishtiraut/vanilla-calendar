@@ -19,6 +19,7 @@ function initEvent(event) {
     const eventStartTimeElement = eventElement.querySelector("[data-event-start-time]");
     const eventEndTimeElement = eventElement.querySelector("[data-event-end-time]");
 
+    eventElement.style.setProperty("--event-color", event.color);
     eventTitleElement.textContent = event.title;
 
     return eventElement;
