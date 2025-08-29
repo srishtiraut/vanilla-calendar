@@ -1,5 +1,5 @@
 import { generateWeekDays, isTheSameDay, today } from "./date.js";
-import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent, eventCollidesWith } from './event.js';
+import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent, eventCollidesWith, adjustDynamicEventMaxLines } from './event.js';
 import { initEventList } from './event-list.js';
 
 const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");
@@ -36,6 +36,11 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
     }
 
     parent.appendChild(calendarElement);
+
+    const dynamicEventElements = calendarElement.querySelectorAll("[data-event-dynamic]");
+    for(const dynamicEventElement of dynamicEventElements){
+        adjustDynamicEventMaxLines(dynamicEventElement);
+    }
 
 }
 
