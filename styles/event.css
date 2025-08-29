@@ -36,6 +36,14 @@
 
 }
 
+.event--dynamic .event__title {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--event-title-max-lines);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .event__color {
     display: inline-block;
     border-radius: 50%;

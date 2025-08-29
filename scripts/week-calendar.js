@@ -24,7 +24,7 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
             isEventAllDay(event)
         );
         const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
-        
+
         sortEventsByTime(nonAllDayEvents);
         initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay);
         initAllDayListItem(calendarAllDayListElement, allDayEvents);
@@ -38,7 +38,7 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
     parent.appendChild(calendarElement);
 
     const dynamicEventElements = calendarElement.querySelectorAll("[data-event-dynamic]");
-    for(const dynamicEventElement of dynamicEventElements){
+    for (const dynamicEventElement of dynamicEventElements) {
         adjustDynamicEventMaxLines(dynamicEventElement);
     }
 
@@ -74,7 +74,7 @@ function initAllDayListItem(parent, events) {
     initEventList(calendarAllDayListItemElement, events);
 
     parent.appendChild(calendarAllDayListItemElement);
-    
+
 }
 
 function initColumn(parent, weekDay, events) {
@@ -114,7 +114,7 @@ function calculateEventsDynamicStyles(events) {
         const topPercentage = 100 * (eventGroupItem.event.startTime / 1440);
         const bottomPercentage = 100 - 100 * (eventGroupItem.event.endTime / 1440);
         const leftPercentage = columnWidth * eventGroupItem.columnIndex;
-        const rightPercentage = columnWidth * (totalColumns - eventGroupItem.columnIndex - 1);
+        const rightPercentage = columnWidth * (totalColumns - eventGroupItem.columnIndex - eventGroupItem.columnSpan);
 
         return {
             event: eventGroupItem.event,
@@ -211,6 +211,21 @@ function groupEvents(events) {
         }
     }
 
+    for (const eventGroup of eventGroups) {
+        eventGroup.sort((columnGroupItemA, columnGroupItemB) => {
+            return columnGroupItemA.columnIndex < columnGroupItemB.columnIndex ? -1 : 1;
+        });
+
+        for (let i = 0; i < eventGroup.length; i++) {
+            const loopEventGroupItem = eventGroup[i];
+            if (i === eventGroup.length - 1) {
+                loopEventGroupItem.columnSpan = totalColumns - loopEventGroupItem.columnIndex;
+            } else {
+                const nextLoopEventGroupItem = eventGroup[i + 1];
+                loopEventGroupItem.columnSpan = nextLoopEventGroupItem.columnIndex - loopEventGroupItem.columnIndex;
+            }
+        }
+    }
     return { eventGroups, totalColumns };
 }
 
