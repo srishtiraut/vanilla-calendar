@@ -1,5 +1,5 @@
 import { generateWeekDays, isTheSameDay, today } from "./date.js";
-import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent } from './event.js';
+import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent, eventCollidesWith } from './event.js';
 import { initEventList } from './event-list.js';
 
 const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");
@@ -33,7 +33,7 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
         const allDayEvents = events.filter((event) =>
             isEventAllDay(event)
         );
-        const nonAllDayEvents = events.filter((event)=>!isEventAllDay(event));
+        const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
         sortEventsByTime(nonAllDayEvents);
 
         initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay);
@@ -91,7 +91,7 @@ function initColumn(parent, weekDay, events) {
     const calendarColumnCellElements = calendarColumnElement.querySelectorAll("[data-week-calendar-cell]");
 
     const eventsWithDynamicStyles = calculateEventsDynamicStyles(events);
-    for(const eventWithDynamicStyles of eventsWithDynamicStyles){
+    for (const eventWithDynamicStyles of eventsWithDynamicStyles) {
         initDynamicEvent(
             calendarColumnElement,
             eventWithDynamicStyles.event,
@@ -102,25 +102,106 @@ function initColumn(parent, weekDay, events) {
     parent.appendChild(calendarColumnElement);
 }
 
-function calculateEventsDynamicStyles(events){
-    return events.map((event)=>({
-        event,
-        styles:{
-            top: "12.5%",
-            bottom: "75%",
-            left: "0",
-            right: "0%"
+function calculateEventsDynamicStyles(events) {
+    return events.map((event) => {
+        const topPercentage = 100 * (event.startTime / 1440);
+        const bottomPercentage = 100 - 100 * (event.endTime / 1440);
+
+        return {
+            event,
+            styles: {
+                top: `${topPercentage}%`,
+                bottom: `${bottomPercentage}%`,
+                left: "0%",
+                right: "0%"
+            }
         }
-    }))
+    });
 }
 
 
-function sortEventsByTime(events){
-    events.sort((eventA, eventB)=>{
-        if(eventStartsBefore(eventA, eventB)){
+function groupEvents(events) {
+    if (events.length === 0) {
+        return {
+            eventGroups: [],
+            totalColumns: 0
+        };
+    }
+
+    const firstEventGroup = [
+        {
+            event: events[0],
+            columnIndex: 0,
+            isInitial: true
+        }
+    ];
+
+    const eventGroups = [firstEventGroup];
+
+    for (let i = 0; i < events.length; i++) {
+        const lastEventGroup = eventGroups[eventGroups.length - 1];
+        const loopEvent = events[i];
+
+        const lastEventGroupCollidingItems = lastEventGroup.filter((eventGroupItem) => eventCollidesWith(eventGroupItem.event, loopEvent));
+
+        if (lastEventGroupCollidingItems.length === 0) {
+            const newEventGroupItem = {
+                event: loopEvent,
+                columnIndex: 0,
+                isInitial: true
+            };
+            const newEventGroup = [newEventGroupItem];
+
+            eventGroups.push(newEventGroup);
+
+            continue;
+        }
+
+        if (lastEventGroupCollidingItems.length === lastEventGroup.length) {
+            const newEventGroupItem = {
+                event: loopEvent,
+                columnIndex: lastEventGroup.length,
+                isInitial: true
+            };
+            lastEventGroup.push(newEventGroupItem);
+            continue;
+        }
+
+        let newColumnIndex = 0;
+        while (true) {
+            const isColumnIndexInUse = lastEventGroupCollidingItems.some((eventGroupItem) => eventGroupItem.columnIndex == newColumnIndex);
+
+            if (isColumnIndexInUse) {
+                newColumnIndex += 1;
+            } else {
+                break;
+            }
+        }
+
+        const newEventGroupItem = {
+            event: loopEvent,
+            columnIndex: newColumnIndex,
+            isInitial: true
+        };
+
+        const newEventGroup = [
+            ...lastEventGroupCollidingItems.map((eventGroupItem) => ({
+                ...eventGroupItem,
+                isInitial: false
+            })),
+            newEventGroupItem
+        ];
+
+        eventGroups.push(newEventGroup);
+    }
+}
+
+function sortEventsByTime(events) {
+    events.sort((eventA, eventB) => {
+        if (eventStartsBefore(eventA, eventB)) {
             return -1;
         }
-        if(eventStartsBefore(eventB, eventA)){
+        if (eventStartsBefore(eventB, eventA)) {
             return 1;
         }
 

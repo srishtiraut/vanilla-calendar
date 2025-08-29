@@ -53,6 +53,13 @@ export function eventEndsBefore(eventA, eventB) {
     return eventA.endTime < eventB.endTime;
 }
 
+export function eventCollidesWith(eventA, eventB){
+    const maxStartTime = Math.max(eventA.startTime, eventB.startTime);
+    const minEndTime = Math.min(eventA.endTime, eventB.endTime);
+
+    return minEndTime > maxStartTime;
+}
+
 export function validateEvent(event) {
     if (event.startTime >= event.endTime) {
         return "Event end time must be after start time."
