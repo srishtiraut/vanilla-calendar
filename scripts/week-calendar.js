@@ -14,7 +14,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     weekday: 'short'
 });
 
-export function initWeekCalendar(parent, selectedDate, eventStore) {
+export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
 
     const calendarElement = calendarContent.querySelector("[data-week-calendar]");
@@ -25,7 +25,7 @@ export function initWeekCalendar(parent, selectedDate, eventStore) {
 
     const calendarColumnsElement = calendarElement.querySelector("[data-week-calendar-columns]");
 
-    const weekDays = generateWeekDays(selectedDate);
+    const weekDays = isSingleDay ? [selectedDate] : generateWeekDays(selectedDate);
 
     for (const weekDay of weekDays) {
 
@@ -39,6 +39,10 @@ export function initWeekCalendar(parent, selectedDate, eventStore) {
         initAllDayListItem(calendarAllDayListElement, allDayEvents);
 
         initColumn(calendarColumnsElement, weekDay);
+    }
+
+    if (isSingleDay) {
+        calendarElement.classList.add("week-calendar--day");
     }
 
     parent.appendChild(calendarElement);

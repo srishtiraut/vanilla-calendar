@@ -16,9 +16,9 @@ export function initCalendar(eventStore) {
         if (selectedView === "month") {
             initMonthCalendar(calendarElement, selectedDate, eventStore);
         } else if (selectedView === "week") {
-            initWeekCalendar(calendarElement, selectedDate, eventStore);
+            initWeekCalendar(calendarElement, selectedDate, eventStore, false);
         } else {
-
+            initWeekCalendar(calendarElement, selectedDate, eventStore, true);
         }
     }
 
