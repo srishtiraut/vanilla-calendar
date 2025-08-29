@@ -99,6 +99,8 @@ function initColumn(parent, weekDay, events) {
 function calculateEventsDynamicStyles(events) {
 
     const { eventGroups, totalColumns } = groupEvents(events);
+    // console.log(eventGroups);
+
     const columnWidth = 100 / totalColumns;
     const initialEventGroupItems = [];
 
@@ -141,7 +143,8 @@ function groupEvents(events) {
         {
             event: events[0],
             columnIndex: 0,
-            isInitial: true
+            isInitial: true,
+            eventIndex: 0
         }
     ];
 
@@ -157,7 +160,8 @@ function groupEvents(events) {
             const newEventGroupItem = {
                 event: loopEvent,
                 columnIndex: 0,
-                isInitial: true
+                isInitial: true,
+                eventIndex: i
             };
             const newEventGroup = [newEventGroupItem];
 
@@ -170,7 +174,8 @@ function groupEvents(events) {
             const newEventGroupItem = {
                 event: loopEvent,
                 columnIndex: lastEventGroup.length,
-                isInitial: true
+                isInitial: true,
+                eventIndex: i
             };
             lastEventGroup.push(newEventGroupItem);
             continue;
@@ -190,7 +195,8 @@ function groupEvents(events) {
         const newEventGroupItem = {
             event: loopEvent,
             columnIndex: newColumnIndex,
-            isInitial: true
+            isInitial: true,
+            eventIndex: i
         };
 
         const newEventGroup = [
@@ -223,6 +229,26 @@ function groupEvents(events) {
             } else {
                 const nextLoopEventGroupItem = eventGroup[i + 1];
                 loopEventGroupItem.columnSpan = nextLoopEventGroupItem.columnIndex - loopEventGroupItem.columnIndex;
+            }
+        }
+    }
+
+    for (let i = 0; i < events.length; i++) {
+        let lowestColumnSpan = Infinity;
+
+        for (const eventGroup of eventGroups) {
+            for (const eventGroupItem of eventGroup) {
+                if (eventGroupItem.eventIndex === i) {
+                    lowestColumnSpan = Math.min(lowestColumnSpan, eventGroupItem.columnSpan);
+                }
+            }
+        }
+
+        for (const eventGroup of eventGroups) {
+            for (const eventGroupItem of eventGroup) {
+                if (eventGroupItem.eventIndex === i) {
+                    eventGroupItem.columnSpan = lowestColumnSpan;
+                }
             }
         }
     }
