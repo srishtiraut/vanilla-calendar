@@ -3,44 +3,32 @@ import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent, ev
 import { initEventList } from './event-list.js';
 
 const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");
-
 const calendarDayOfWeekTemplateElement = document.querySelector("[data-template='week-calendar-day-of-week']");
-
 const calendarAllDayListItemTemplateElement = document.querySelector("[data-template='week-calendar-all-day-list-item']");
-
 const calendarColumnTemplateElement = document.querySelector("[data-template='week-calendar-column']");
-
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
     weekday: 'short'
 });
 
 export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
-
     const calendarElement = calendarContent.querySelector("[data-week-calendar]");
-
     const calendarDayofWeekListElement = calendarElement.querySelector("[data-week-calendar-day-of-week-list]");
-
     const calendarAllDayListElement = calendarElement.querySelector("[data-week-calendar-all-day-list]");
-
     const calendarColumnsElement = calendarElement.querySelector("[data-week-calendar-columns]");
-
     const weekDays = isSingleDay ? [selectedDate] : generateWeekDays(selectedDate);
 
     for (const weekDay of weekDays) {
-
         const events = eventStore.getEventsByDate(weekDay);
         const allDayEvents = events.filter((event) =>
             isEventAllDay(event)
         );
         const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
+        
         sortEventsByTime(nonAllDayEvents);
-
         initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay);
-
         initAllDayListItem(calendarAllDayListElement, allDayEvents);
-
-        initColumn(calendarColumnsElement, weekDay, events);
+        initColumn(calendarColumnsElement, weekDay, nonAllDayEvents);
     }
 
     if (isSingleDay) {
@@ -81,6 +69,7 @@ function initAllDayListItem(parent, events) {
     initEventList(calendarAllDayListItemElement, events);
 
     parent.appendChild(calendarAllDayListItemElement);
+    
 }
 
 function initColumn(parent, weekDay, events) {
@@ -103,17 +92,32 @@ function initColumn(parent, weekDay, events) {
 }
 
 function calculateEventsDynamicStyles(events) {
-    return events.map((event) => {
-        const topPercentage = 100 * (event.startTime / 1440);
-        const bottomPercentage = 100 - 100 * (event.endTime / 1440);
+
+    const { eventGroups, totalColumns } = groupEvents(events);
+    const columnWidth = 100 / totalColumns;
+    const initialEventGroupItems = [];
+
+    for (const eventGroup of eventGroups) {
+        for (const eventGroupItem of eventGroup) {
+            if (eventGroupItem.isInitial) {
+                initialEventGroupItems.push(eventGroupItem);
+            }
+        }
+    }
+
+    return initialEventGroupItems.map((eventGroupItem) => {
+        const topPercentage = 100 * (eventGroupItem.event.startTime / 1440);
+        const bottomPercentage = 100 - 100 * (eventGroupItem.event.endTime / 1440);
+        const leftPercentage = columnWidth * eventGroupItem.columnIndex;
+        const rightPercentage = columnWidth * (totalColumns - eventGroupItem.columnIndex - 1);
 
         return {
-            event,
+            event: eventGroupItem.event,
             styles: {
                 top: `${topPercentage}%`,
                 bottom: `${bottomPercentage}%`,
-                left: "0%",
-                right: "0%"
+                left: `${leftPercentage}%`,
+                right: `${rightPercentage}%`
             }
         }
     });
@@ -138,7 +142,7 @@ function groupEvents(events) {
 
     const eventGroups = [firstEventGroup];
 
-    for (let i = 0; i < events.length; i++) {
+    for (let i = 1; i < events.length; i++) {
         const lastEventGroup = eventGroups[eventGroups.length - 1];
         const loopEvent = events[i];
 
@@ -194,6 +198,15 @@ function groupEvents(events) {
 
         eventGroups.push(newEventGroup);
     }
+
+    let totalColumns = 0;
+    for (const eventGroup of eventGroups) {
+        for (const eventGroupItem of eventGroup) {
+            totalColumns = Math.max(totalColumns, eventGroupItem.columnIndex + 1);
+        }
+    }
+
+    return { eventGroups, totalColumns };
 }
 
 function sortEventsByTime(events) {
