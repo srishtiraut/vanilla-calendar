@@ -47,6 +47,23 @@ function initCalendarDay(parent, calendarDay, events) {
 
     calendarDayLabelElement.textContent = calendarDay.getDate();
 
+    calendarDayLabelElement.addEventListener("click", ()=>{
+        document.dispatchEvent(new CustomEvent('date-change', {
+            detail: {
+                date: calendarDay
+            },
+            bubbles: true
+        }));
+
+        document.dispatchEvent(new CustomEvent("view-change", {
+            detail: {
+                view: 'day'
+            },
+            bubbles: true
+        }));
+
+    });
+
     initEventList(calendarDayElement, events);
 
     parent.appendChild(calendarDayElement);
