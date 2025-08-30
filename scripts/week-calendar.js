@@ -62,6 +62,21 @@ function initDayOfWeek(parent, selectedDate, weekDay) {
         calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--highlight");
     }
 
+    calendarDayOfWeekButtonElement.addEventListener("click", ()=>{
+        document.dispatchEvent(new CustomEvent('date-change', {
+            detail: {
+                date: weekDay
+            },
+            bubbles: true
+        }));
+
+        document.dispatchEvent(new CustomEvent('view-change', {
+            detail: {
+                view: "day"
+            },
+            bubbles: true
+        }));
+    });
 
     parent.appendChild(calendarDayOfWeekElement);
 }
