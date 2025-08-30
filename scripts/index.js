@@ -7,6 +7,8 @@ import { initEventStore } from "./event-store.js";
 import { initNav } from "./nav.js";
 import { initEventDetailsDialog } from "./event-details-dialog.js";
 import { initEventDeleteDialog } from "./event-delete-dialog.js";
+import { initMiniCalendars } from "./mini-calendar.js";
+
 
 const eventStore = initEventStore();
 
@@ -19,4 +21,5 @@ initNotifications();
 initViewSelect();
 initEventDetailsDialog();
 initEventDeleteDialog();
+initMiniCalendars();
 
