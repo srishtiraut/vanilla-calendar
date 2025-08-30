@@ -15,10 +15,29 @@ const eventTimeFormatter = new Intl.DateTimeFormat("en-US", {
 
 export function initEventDetailsDialog() {
     const dialog = initDialog("event-details");
+
+    const deleteButtonElement = dialog.dialogElement.querySelector("[data-event-details-delete-button]");
+
+    let currentEvent = null;
+
     document.addEventListener("event-click", (event)=>{
+        currentEvent = event.detail.event;
         fillEventDetailsDialog(dialog.dialogElement, event.detail.event);
         dialog.open();
-    } );
+    });
+
+    deleteButtonElement.addEventListener("click", ()=>{
+        dialog
+            .close()
+            .then(()=>{
+                deleteButtonElement.dispatchEvent(new CustomEvent('event-delete-request', {
+                    detail: {
+                        event: currentEvent
+                    },
+                    bubbles: true
+                }));
+            }); 
+    });
 }
 
 function fillEventDetailsDialog(parent, event){

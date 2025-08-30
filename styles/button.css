@@ -1,4 +1,4 @@
-.button{
+.button {
     font-size: var(--font-size-sm);
     line-height: var(--line-height-sm);
     font-weight: 400;
@@ -10,31 +10,41 @@
     transition: background-color var(--duration-sm) ease-out;
 }
 
-.button--secondary{
+.button--secondary {
     background-color: var(--color-white);
     border: 1px solid var(--color-gray-300);
     color: var(--color-text-dark);
 }
 
-.button--secondary:hover{
+.button--secondary:hover {
     background-color: var(--color-gray-100);
 }
 
-.button--primary{
+.button--primary {
     background-color: var(--color-blue-600);
     color: var(--color-text-light);
 }
 
-.button--primary:hover{
+.button--primary:hover {
     background-color: var(--color-blue-500);
 }
 
-.button--lg{
+.button--danger {
+    background-color: var(--color-red-600);
+    color: var(--color-text-light);
+}
+
+.button--danger:hover {
+    background-color: var(--color-red-500);
+}
+
+
+.button--lg {
     font-weight: 500;
     height: 2.5rem;
 }
 
-.button--icon{
+.button--icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,6 +53,6 @@
     border: none;
 }
 
-.button__icon{
+.button__icon {
     width: 1rem;
 }

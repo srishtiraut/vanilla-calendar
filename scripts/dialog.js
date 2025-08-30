@@ -8,7 +8,7 @@ export function initDialog(name) {
     function close() {
         dialogElement.classList.add("dialog--closing");
 
-        waitUntilAnimationsFinish(dialogElement).then(() => {
+        return waitUntilAnimationsFinish(dialogElement).then(() => {
             dialogElement.classList.remove("dialog--closing");
             dialogElement.close();
         })
@@ -36,13 +36,12 @@ export function initDialog(name) {
     });
 
     return {
-dialogElement, 
-
+        dialogElement, 
         open() {
             dialogElement.showModal();
         },
         close() {
-            close();
+            return close();
         }
     };
 }

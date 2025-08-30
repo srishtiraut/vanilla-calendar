@@ -2,11 +2,27 @@ import { isTheSameDay } from "./date.js";
 
 
 export function initEventStore() {
+    // CREATE an event in the local storage
     document.addEventListener("event-create", (event) => {
         const createdEvent = event.detail.event;
         const events = getEventsFromLocalStorage();
         events.push(createdEvent);
 
+        saveEventIntoLocalStorage(events);
+
+        document.dispatchEvent(new CustomEvent('events-change', {
+            bubbles: true
+        }));
+
+    });
+
+    // DELETE an event from the local storage
+    document.addEventListener("event-delete", (event) => {
+        const deletedEvent = event.detail.event;
+        const events = getEventsFromLocalStorage().filter((event)=>{
+            return event.id !== deletedEvent.id;
+        });
+        
         saveEventIntoLocalStorage(events);
 
         document.dispatchEvent(new CustomEvent('events-change', {

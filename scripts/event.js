@@ -104,3 +104,7 @@ export function adjustDynamicEventMaxLines(dynamicEventElement) {
 
     dynamicEventElement.style.setProperty("--event-title-max-lines", maxTitleLines);
 }
+
+export function generateEventId(){
+    return Date.now();
+}

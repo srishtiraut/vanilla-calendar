@@ -1,4 +1,4 @@
-import { validateEvent } from "./event.js";
+import { validateEvent, generateEventId } from "./event.js";
 
 
 
@@ -58,6 +58,7 @@ function formIntoEvent(formElement) {
     const color = formData.get("color");
 
     const event = {
+        id: generateEventId(),
         title,
         date: new Date(date),
         startTime: Number.parseInt(startTime, 10),

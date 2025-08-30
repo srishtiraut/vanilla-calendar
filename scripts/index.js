@@ -6,6 +6,7 @@ import { initNotifications } from "./notifications.js";
 import { initEventStore } from "./event-store.js";
 import { initNav } from "./nav.js";
 import { initEventDetailsDialog } from "./event-details-dialog.js";
+import { initEventDeleteDialog } from "./event-delete-dialog.js";
 
 const eventStore = initEventStore();
 
@@ -17,3 +18,5 @@ initNav();
 initNotifications();
 initViewSelect();
 initEventDetailsDialog();
+initEventDeleteDialog();
+
