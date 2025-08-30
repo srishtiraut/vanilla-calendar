@@ -18,6 +18,8 @@ export function initEventDetailsDialog() {
 
     const deleteButtonElement = dialog.dialogElement.querySelector("[data-event-details-delete-button]");
 
+    const editButtonElement = dialog.dialogElement.querySelector("[data-event-details-edit-button]");
+
     let currentEvent = null;
 
     document.addEventListener("event-click", (event)=>{
@@ -26,11 +28,26 @@ export function initEventDetailsDialog() {
         dialog.open();
     });
 
+    // event listener for delete button
     deleteButtonElement.addEventListener("click", ()=>{
         dialog
             .close()
             .then(()=>{
                 deleteButtonElement.dispatchEvent(new CustomEvent('event-delete-request', {
+                    detail: {
+                        event: currentEvent
+                    },
+                    bubbles: true
+                }));
+            }); 
+    });
+
+    //event listener for edit button
+    editButtonElement.addEventListener("click", ()=>{
+        dialog
+            .close()
+            .then(()=>{
+                editButtonElement.dispatchEvent(new CustomEvent('event-edit-request', {
                     detail: {
                         event: currentEvent
                     },

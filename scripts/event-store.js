@@ -32,6 +32,22 @@ export function initEventStore() {
 
     });
 
+        // DELETE an event from the local storage
+    document.addEventListener("event-edit", (event) => {
+        const editedEvent = event.detail.event;
+        const events = getEventsFromLocalStorage().map((event)=>{
+            return event.id === editedEvent.id ? editedEvent : event;
+        });
+        
+        saveEventIntoLocalStorage(events);
+
+        document.dispatchEvent(new CustomEvent('events-change', {
+            bubbles: true
+        })
+        );
+
+    });
+
     return {
         getEventsByDate(date){
             const events = getEventsFromLocalStorage();
