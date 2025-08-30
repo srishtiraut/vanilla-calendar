@@ -13,7 +13,7 @@
 @import "./input.css";
 @import "./color-select.css";
 @import "./toaster.css";
-
+@import "./event-details.css";
 
 * {
     font-family: ui-sans-serif, system-ui, sans-serif;

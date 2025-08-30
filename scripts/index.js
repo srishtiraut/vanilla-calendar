@@ -5,6 +5,7 @@ import { initEventFormDialog } from "./event-form-dialog.js";
 import { initNotifications } from "./notifications.js";
 import { initEventStore } from "./event-store.js";
 import { initNav } from "./nav.js";
+import { initEventDetailsDialog } from "./event-details-dialog.js";
 
 const eventStore = initEventStore();
 
@@ -15,3 +16,4 @@ initEventFormDialog();
 initNav();
 initNotifications();
 initViewSelect();
+initEventDetailsDialog();
