@@ -62,7 +62,7 @@ function initDayOfWeek(parent, selectedDate, weekDay) {
         calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--highlight");
     }
 
-    calendarDayOfWeekButtonElement.addEventListener("click", ()=>{
+    calendarDayOfWeekButtonElement.addEventListener("click", () => {
         document.dispatchEvent(new CustomEvent('date-change', {
             detail: {
                 date: weekDay
@@ -106,6 +106,23 @@ function initColumn(parent, weekDay, events) {
             eventWithDynamicStyles.event,
             eventWithDynamicStyles.styles
         );
+    }
+
+    for (const calendarColumnCellElement of calendarColumnCellElements) {
+        const cellStartTime = Number.parseInt(calendarColumnCellElement.dataset.weekCalendarCell, 10);
+
+        const cellEndTime = cellStartTime + 60;
+
+        calendarColumnCellElement.addEventListener("click", () => {
+            document.dispatchEvent(new CustomEvent('event-create-request', {
+                detail: {
+                    date: weekDay,
+                    startTime: cellStartTime,
+                    endTime: cellEndTime
+                },
+                bubbles: true
+            }));
+        });
     }
 
     parent.appendChild(calendarColumnElement);
