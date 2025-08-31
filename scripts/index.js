@@ -8,11 +8,10 @@ import { initNav } from "./nav.js";
 import { initEventDetailsDialog } from "./event-details-dialog.js";
 import { initEventDeleteDialog } from "./event-delete-dialog.js";
 import { initMiniCalendars } from "./mini-calendar.js";
-
+import { initResponsive } from "./responsive.js"
 
 const eventStore = initEventStore();
 
-// initEventStore();
 initCalendar(eventStore);
 initEventCreateButton();
 initEventFormDialog();
@@ -22,4 +21,5 @@ initViewSelect();
 initEventDetailsDialog();
 initEventDeleteDialog();
 initMiniCalendars();
+initResponsive();
 
