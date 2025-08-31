@@ -10,7 +10,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     weekday: 'short'
 });
 
-export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) {
+export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay, deviceType) {
     const calendarContent = calendarTemplateElement.content.cloneNode(true);
     const calendarElement = calendarContent.querySelector("[data-week-calendar]");
     const calendarDayofWeekListElement = calendarElement.querySelector("[data-week-calendar-day-of-week-list]");
@@ -26,9 +26,12 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
         const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
 
         sortEventsByTime(nonAllDayEvents);
-        initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay);
-        initAllDayListItem(calendarAllDayListElement, allDayEvents);
-        initColumn(calendarColumnsElement, weekDay, nonAllDayEvents);
+        initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay, deviceType);
+
+        if(deviceType==="desktop" || (deviceType==="mobile" && isTheSameDay(weekDay, selectedDate))){
+            initAllDayListItem(calendarAllDayListElement, allDayEvents);
+            initColumn(calendarColumnsElement, weekDay, nonAllDayEvents);
+        }      
     }
 
     if (isSingleDay) {
@@ -44,7 +47,7 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay) 
 
 }
 
-function initDayOfWeek(parent, selectedDate, weekDay) {
+function initDayOfWeek(parent, selectedDate, weekDay, deviceType) {
     const calendarDayOfWeekContent = calendarDayOfWeekTemplateElement.content.cloneNode(true);
 
     const calendarDayOfWeekElement = calendarDayOfWeekContent.querySelector("[data-week-calendar-day-of-week]");
@@ -62,6 +65,11 @@ function initDayOfWeek(parent, selectedDate, weekDay) {
         calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--highlight");
     }
 
+    if(isTheSameDay(weekDay, selectedDate)){
+        calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--selected");
+    }
+
+
     calendarDayOfWeekButtonElement.addEventListener("click", () => {
         document.dispatchEvent(new CustomEvent('date-change', {
             detail: {
@@ -70,12 +78,14 @@ function initDayOfWeek(parent, selectedDate, weekDay) {
             bubbles: true
         }));
 
-        document.dispatchEvent(new CustomEvent('view-change', {
-            detail: {
-                view: "day"
-            },
-            bubbles: true
-        }));
+        if(deviceType!=="mobile"){
+            document.dispatchEvent(new CustomEvent('view-change', {
+                detail: {
+                    view: "day"
+                },
+                bubbles: true
+            }));
+        }        
     });
 
     parent.appendChild(calendarDayOfWeekElement);
