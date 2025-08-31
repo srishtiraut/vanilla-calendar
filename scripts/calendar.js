@@ -2,12 +2,13 @@ import { today } from './date.js';
 import { initMonthCalendar } from './month-calendar.js';
 import { initWeekCalendar } from './week-calendar.js';
 import { currentDeviceType } from './responsive.js';
+import { getUrlDate, getUrlView } from './url.js';
 
 export function initCalendar(eventStore) {
     const calendarElement = document.querySelector("[data-calendar]");
 
-    let selectedView = "month";
-    let selectedDate = today();
+    let selectedView = getUrlView();
+    let selectedDate = getUrlDate();
     let deviceType = currentDeviceType();
 
     function refreshCalendar() {
@@ -28,7 +29,7 @@ export function initCalendar(eventStore) {
             initWeekCalendar(calendarElement, selectedDate, eventStore, true, deviceType);
         }
 
-        calendarElement.querySelector("[data-calendar-scrollable]").scrollTo({top: scrollTop});
+        calendarElement.querySelector("[data-calendar-scrollable]").scrollTo({ top: scrollTop });
     }
 
     document.addEventListener("view-change",
@@ -42,7 +43,7 @@ export function initCalendar(eventStore) {
         refreshCalendar();
     });
 
-    document.addEventListener("device-type-change", (event)=>{
+    document.addEventListener("device-type-change", (event) => {
         deviceType = event.detail.deviceType;
         refreshCalendar();
     });

@@ -1,4 +1,5 @@
 import { addMonths, generateMonthCalendarDays, isTheSameDay, subtractMonths, today } from "./date.js";
+import { getUrlDate } from "./url.js";
 
 
 const calendarDayListItemTemplateElement = document.querySelector("[data-template='mini-calendar-day-list-item']");
@@ -18,8 +19,8 @@ function initMiniCalendar(calendarElement) {
     const calendarPreviousButtonElement = calendarElement.querySelector("[data-mini-calendar-previous-button]");
     const calendarNextButtonElement = calendarElement.querySelector("[data-mini-calendar-next-button]");
 
-    let selectedDate = today();
-    let miniCalendarDate = today();
+    let selectedDate = getUrlDate();
+    let miniCalendarDate = getUrlDate();
 
     function refreshMiniCalendar() {
         refreshDateElement(calendarElement, miniCalendarDate);
