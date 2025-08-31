@@ -22,11 +22,11 @@ export function initResponsive() {
 
         if(deviceType==="mobile"){
             document.dispatchEvent(new CustomEvent('view-change', {
-            detail: {
-                view: "week"
-            },
-            bubbles: true
-        }));
+                detail: {
+                    view: "week"
+                },
+                bubbles: true
+            }));
         }
     });
 }
