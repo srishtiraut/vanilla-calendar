@@ -1,14 +1,14 @@
-.sidebar{
+.sidebar {
     border-right: 1px solid var(--color-gray-300);
-    width: 17rem;  
+    width: 17rem;
     /* 1 rem roughly = root font size */
     display: flex;
-    flex-direction: column ;
+    flex-direction: column;
     gap: 1rem;
     padding: 1rem;
 }
 
-.padding__logo{
+.sidebar__logo {
     display: flex;
     align-items: center;
     gap: 0.5rem;

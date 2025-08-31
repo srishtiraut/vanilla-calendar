@@ -97,6 +97,10 @@
     overflow-y: auto;
 }
 
+.week-calendar__time-list {
+    width: 4.5rem;
+}
+
 .week-calendar__time-item {
     height: 4rem;
     text-align: center;
