@@ -9,6 +9,6 @@
     color: var(--color-text-light);
     cursor: pointer;
     box-shadow: var(--box-shadow-lg);
-    /* border: 0.125rem solid var(--color-white); */
-    border: 0.125rem solid var(--color-blue-600);
+    border: 0.125rem solid var(--color-white);
+    /* border: 0.125rem solid var(--color-blue-600); */
 }
