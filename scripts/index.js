@@ -12,6 +12,7 @@ import { initResponsive } from "./responsive.js"
 import { initHamburger } from "./hamburger.js";
 import { initMobileSidebar } from "./mobile-sidebar.js";
 import { initUrl } from "./url.js";
+import { initSync } from "./sync.js";
 
 const eventStore = initEventStore();
 
@@ -28,3 +29,4 @@ initResponsive();
 initHamburger();
 initMobileSidebar();
 initUrl();
+initSync();
