@@ -1,9 +1,8 @@
-export function initHamburger(){
+export function initHamburger() {
     const hamburgerButtonElement = document.querySelector("[data-hamburger-button]");
 
-    hamburgerButtonElement.addEventListener("click", ()=>{
+    hamburgerButtonElement.addEventListener("click", () => {
         hamburgerButtonElement.dispatchEvent(new CustomEvent('mobile-sidebar-open-request', {
-            detail: details,
             bubbles: true
         }));
     });

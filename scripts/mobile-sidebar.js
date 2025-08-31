@@ -1,4 +1,4 @@
-import { initDialog } from "./dialog"
+import { initDialog } from "./dialog.js"
 
 
 export function initMobileSidebar() {
