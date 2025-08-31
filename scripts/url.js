@@ -2,7 +2,7 @@ import { today } from "./date.js";
 
 export function initUrl(){
     let selectedView = getUrlView();
-    let selectedDay = getUrlDate();
+    let selectedDate = getUrlDate();
 
     function updateUrl(){
         const url = new URL(window.location);
