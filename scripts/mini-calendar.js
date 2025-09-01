@@ -70,19 +70,41 @@ function refreshDayListElement(parent, miniCalendarDate, selectedDate) {
 
         calendarDayElement.textContent = calendarDay.getDate();
 
-        if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
-            calendarDayElement.classList.add("mini-calendar__day--other");
-        }
+        // if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
+        //     calendarDayElement.classList.add("mini-calendar__day--other");
+        // }
 
+        // if (isTheSameDay(selectedDate, calendarDay)) {
+        //     calendarDayElement.classList.add("button--primary");
+        // } else {
+        //     calendarDayElement.classList.add("button--secondary");
+        // }
+
+        // calendarDayElement.classList.remove("button--primary", "button--secondary");
+        // calendarDayElement.classList.add(
+        //     isTheSameDay(selectedDate, calendarDay) ? "button--primary" : "button--secondary"
+        // );
+
+
+        // if (isTheSameDay(today(), calendarDay)) {
+        //     calendarDayElement.classList.add("mini-calendar__day--highlight");
+        // }
+
+        // Reset button classes first
+        calendarDayElement.classList.remove("button--primary", "button--secondary", "mini-calendar__day--other");
+
+        // If this is the selected day -> make it primary
         if (isTheSameDay(selectedDate, calendarDay)) {
             calendarDayElement.classList.add("button--primary");
         } else {
             calendarDayElement.classList.add("button--secondary");
+
+            // Only mark as "other" if it's not selected
+            if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
+                calendarDayElement.classList.add("mini-calendar__day--other");
+            }
         }
 
-        if (isTheSameDay(today(), calendarDay)) {
-            calendarDayElement.classList.add("mini-calendar__day--highlight");
-        }
 
         calendarDayElement.addEventListener("click", () => {
             calendarDayElement.dispatchEvent(new CustomEvent('date-change', {
