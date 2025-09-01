@@ -11,7 +11,7 @@
     overflow: hidden;
 }
 
-.dialog--sidebar{
+.dialog--sidebar {
     justify-content: flex-start;
 }
 
@@ -20,16 +20,16 @@
     animation: open-dialog var(--duration-sm) forwards ease-out;
 }
 
-.dialog--closing[open]{
+.dialog--closing[open] {
     animation: close-dialog var(--duration-sm) forwards ease-out;
 }
 
-.dialog--sidebar.dialog--closing[open]{
+.dialog--sidebar.dialog--closing[open] {
     animation-name: close-sidebar-dialog;
     animation-duration: var(--duration-md);
 }
 
-.dialog--sidebar[open]{
+.dialog--sidebar[open] {
     animation-name: open-sidebar-dialog;
     animation-duration: var(--duration-md);
 }
@@ -39,15 +39,15 @@
     animation: open-backdrop var(--duration-sm) forwards ease-out;
 }
 
-.dialog--sidebar[open]::backdrop{
+.dialog--sidebar[open]::backdrop {
     animation-duration: var(--duration-md);
 }
 
-.dialog--closing[open]::backdrop{
+.dialog--closing[open]::backdrop {
     animation: close-backdrop var(--duration-sm) forwards ease-out;
 }
 
-.dialog--sidebar.dialog--closing[open]::backdrop{
+.dialog--sidebar.dialog--closing[open]::backdrop {
     animation-duration: var(--duration-md);
 }
 
@@ -64,7 +64,7 @@
     max-height: calc(100vh-2rem);
 }
 
-.dialog--sidebar .dialog__wrapper{
+.dialog--sidebar .dialog__wrapper {
     margin: 0;
     max-height: unset;
     height: 100%;
@@ -82,13 +82,13 @@
     padding: 0 1.5rem;
 }
 
-.dialog__header-actions{
+.dialog__header-actions {
     display: flex;
     align-items: stretch;
     gap: 0.5rem;
 }
 
-.dialog__header-actions-divider{
+.dialog__header-actions-divider {
     flex-shrink: 0;
     width: 1px;
     background-color: var(--color-gray-100);
@@ -106,7 +106,7 @@
     padding: 0 1.5rem;
 }
 
-.dialog--sidebar .dialog__content{
+.dialog--sidebar .dialog__content {
     padding: 0;
 }
 
@@ -146,19 +146,21 @@
 }
 
 @keyframes open-sidebar-dialog {
-    from{
+    from {
         transform: translateX(-100%);
     }
-    to{
+
+    to {
         transform: translateX(0);
     }
 }
 
 @keyframes close-sidebar-dialog {
-    from{
+    from {
         transform: translateX(0);
     }
-    to{
+
+    to {
         transform: translateX(-100%);
     }
 }
@@ -180,5 +182,25 @@
 
     to {
         opacity: 0;
+    }
+}
+
+/* Mobile adjustments for the create event dialog */
+@media (max-width: 600px) {
+    .dialog__wrapper {
+        width: 98%;
+        /* shrink width relative to screen */
+        max-width: 18rem;
+        /* cap the size */
+        padding: 1rem 0.75rem;
+        /* reduce padding */
+        gap: 1rem;
+        /* tighter spacing */
+        border-radius: var(--border-radius-sm);
+    }
+
+    .dialog__title {
+        font-size: var(--font-size-xl);
+        line-height: var(--line-height-xl);
     }
 }
