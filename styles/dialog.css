@@ -196,7 +196,7 @@
         /* reduce padding */
         gap: 1rem;
         /* tighter spacing */
-        border-radius: var(--border-radius-sm);
+        border-radius: var(--border-radius-md);
     }
 
     .dialog__title {
