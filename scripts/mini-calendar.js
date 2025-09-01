@@ -70,9 +70,9 @@ function refreshDayListElement(parent, miniCalendarDate, selectedDate) {
 
         calendarDayElement.textContent = calendarDay.getDate();
 
-        // if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
-        //     calendarDayElement.classList.add("mini-calendar__day--other");
-        // }
+        if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
+            calendarDayElement.classList.add("mini-calendar__day--other");
+        }
 
         // if (isTheSameDay(selectedDate, calendarDay)) {
         //     calendarDayElement.classList.add("button--primary");
@@ -91,15 +91,26 @@ function refreshDayListElement(parent, miniCalendarDate, selectedDate) {
         // }
 
         // Reset button classes first
-        calendarDayElement.classList.remove("button--primary", "button--secondary", "mini-calendar__day--other");
+        calendarDayElement.classList.remove(
+            "button--primary",
+            "button--secondary",
+            "mini-calendar__day--other",
+            "mini-calendar__day--highlight"
+        );
 
-        // If this is the selected day -> make it primary
+        // Case 1: selected date -> primary
         if (isTheSameDay(selectedDate, calendarDay)) {
             calendarDayElement.classList.add("button--primary");
-        } else {
+        }
+        // Case 2: today but not selected -> secondary + highlight
+        else if (isTheSameDay(today(), calendarDay)) {
+            calendarDayElement.classList.add("button--secondary", "mini-calendar__day--highlight");
+        }
+        // Case 3: normal days -> secondary
+        else {
             calendarDayElement.classList.add("button--secondary");
 
-            // Only mark as "other" if it's not selected
+            // If not in the current month, mark as "other"
             if (miniCalendarDate.getMonth() !== calendarDay.getMonth()) {
                 calendarDayElement.classList.add("mini-calendar__day--other");
             }
