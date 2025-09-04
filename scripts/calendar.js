@@ -17,7 +17,8 @@ export function initCalendar(eventStore) {
 
         const scrollTop = calendarScrollableElement === null ? 0 : calendarScrollableElement.scrollTop;
 
-        calendarElement.replaceChildren();
+        // Remove all current child elements from calendarElement s.t it resets the view before adding the new one.
+        calendarElement.replaceChildren();      //basically empty the <div class='calendar'>
 
         //show month calendar when selectedView == month
         if (selectedView === "month") {

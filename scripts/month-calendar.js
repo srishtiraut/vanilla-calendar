@@ -3,9 +3,9 @@ import { initEventList } from "./event-list.js";
 import { isEventAllDay, eventStartsBefore } from "./event.js";
 
 
-const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");
+const calendarTemplateElement = document.querySelector("[data-template='month-calendar']");   //pick the <template> for month-view-calendar
 
-const calendarDayTemplateElement = document.querySelector("[data-template='month-calendar-day']");
+const calendarDayTemplateElement = document.querySelector("[data-template='month-calendar-day']");  //pick the <template> for a month's day
 
 const calendarWeekClasses = {
     4: "four-week",
@@ -21,7 +21,7 @@ export function initMonthCalendar(parent, selectedDate, eventStore) {
     const calendarDays = generateMonthCalendarDays(selectedDate);
     const calendarWeeks = calendarDays / 7;
 
-    const calendarWeekClass = calendarWeekClasses[calendarWeeks];
+    const calendarWeekClass = calendarWeekClasses[calendarWeeks];       //calendarWeekClasses[4] or calendarWeekClasses[5] orcalendarWeekClasses[6]
     calendarElement.classList.add(calendarWeekClass);
 
     for (const calendarDay of calendarDays) {
@@ -46,6 +46,7 @@ function initCalendarDay(parent, calendarDay, events) {
         calendarDayElement.classList.add("month-calendar__day--highlight");
     }
 
+    // dynamically inject the dates(as in day number) for given month
     calendarDayLabelElement.textContent = calendarDay.getDate();
 
     calendarDayLabelElement.addEventListener("click", () => {
@@ -78,7 +79,7 @@ function initCalendarDay(parent, calendarDay, events) {
 
     initEventList(calendarDayElement, events);
 
-    parent.appendChild(calendarDayElement);
+    parent.appendChild(calendarDayElement);     //Adds a new calendarDay element to the end of the calendar(parent element)’s children.
 }
 
 function sortCalendarDayEvents(events) {

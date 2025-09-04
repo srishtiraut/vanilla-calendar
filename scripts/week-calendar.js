@@ -2,7 +2,7 @@ import { generateWeekDays, isTheSameDay, today } from "./date.js";
 import { isEventAllDay, eventStartsBefore, eventEndsBefore, initDynamicEvent, eventCollidesWith, adjustDynamicEventMaxLines } from './event.js';
 import { initEventList } from './event-list.js';
 
-const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");
+const calendarTemplateElement = document.querySelector("[data-template='week-calendar']");  //pick the <template> for week-view-calendar
 const calendarDayOfWeekTemplateElement = document.querySelector("[data-template='week-calendar-day-of-week']");
 const calendarAllDayListItemTemplateElement = document.querySelector("[data-template='week-calendar-all-day-list-item']");
 const calendarColumnTemplateElement = document.querySelector("[data-template='week-calendar-column']");
@@ -19,27 +19,38 @@ export function initWeekCalendar(parent, selectedDate, eventStore, isSingleDay, 
     const weekDays = isSingleDay ? [selectedDate] : generateWeekDays(selectedDate);
 
     for (const weekDay of weekDays) {
-        const events = eventStore.getEventsByDate(weekDay);
+        const events = eventStore.getEventsByDate(weekDay);     //fetch all events of a weekDay
+
+        /*
+        Separate events into:
+        allDayEvents → events like "Holiday".
+        nonAllDayEvents → events with specific times.
+        */
         const allDayEvents = events.filter((event) =>
             isEventAllDay(event)
         );
         const nonAllDayEvents = events.filter((event) => !isEventAllDay(event));
-
         sortEventsByTime(nonAllDayEvents);
+
+        //Render day labels at the top
         initDayOfWeek(calendarDayofWeekListElement, selectedDate, weekDay, deviceType);
 
-        if(deviceType==="desktop" || (deviceType==="mobile" && isTheSameDay(weekDay, selectedDate))){
+        if (deviceType === "desktop" || (deviceType === "mobile" && isTheSameDay(weekDay, selectedDate))) {
+            //Render All-day events
             initAllDayListItem(calendarAllDayListElement, allDayEvents);
+
+            //Render Timed event column
             initColumn(calendarColumnsElement, weekDay, nonAllDayEvents);
-        }      
+        }
     }
 
     if (isSingleDay) {
         calendarElement.classList.add("week-calendar--day");
     }
 
-    parent.appendChild(calendarElement);
+    parent.appendChild(calendarElement);        //insert this week calendar cookie into the calendar parent mould
 
+    //Prevent event title from overflowing
     const dynamicEventElements = calendarElement.querySelectorAll("[data-event-dynamic]");
     for (const dynamicEventElement of dynamicEventElements) {
         adjustDynamicEventMaxLines(dynamicEventElement);
@@ -58,6 +69,7 @@ function initDayOfWeek(parent, selectedDate, weekDay, deviceType) {
 
     const calendarDayOfWeekNumberElement = calendarDayOfWeekElement.querySelector("[data-week-calendar-day-of-week-number]");
 
+    //Fetch the date and day to be displayed on the week calendar top
     calendarDayOfWeekNumberElement.textContent = weekDay.getDate();
     calendarDayOfWeekDayElement.textContent = dateFormatter.format(weekDay);
 
@@ -65,7 +77,7 @@ function initDayOfWeek(parent, selectedDate, weekDay, deviceType) {
         calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--highlight");
     }
 
-    if(isTheSameDay(weekDay, selectedDate)){
+    if (isTheSameDay(weekDay, selectedDate)) {
         calendarDayOfWeekButtonElement.classList.add("week-calendar__day-of-week-button--selected");
     }
 
@@ -78,22 +90,23 @@ function initDayOfWeek(parent, selectedDate, weekDay, deviceType) {
             bubbles: true
         }));
 
-        if(deviceType!=="mobile"){
+        if (deviceType !== "mobile") {
             document.dispatchEvent(new CustomEvent('view-change', {
                 detail: {
                     view: "day"
                 },
                 bubbles: true
             }));
-        }        
+        }
     });
 
     parent.appendChild(calendarDayOfWeekElement);
 }
 
 function initAllDayListItem(parent, events) {
-    const calendarAllDayListItemContent = calendarAllDayListItemTemplateElement.content.cloneNode(true);
+    //This fx renders a single row at the top for all-day events
 
+    const calendarAllDayListItemContent = calendarAllDayListItemTemplateElement.content.cloneNode(true);
     const calendarAllDayListItemElement = calendarAllDayListItemContent.querySelector("[data-week-calendar-all-day-list-item]");
 
     initEventList(calendarAllDayListItemElement, events);
@@ -103,10 +116,10 @@ function initAllDayListItem(parent, events) {
 }
 
 function initColumn(parent, weekDay, events) {
+    //This fx builds the hourly grid for one day
+
     const calendarColumnContent = calendarColumnTemplateElement.content.cloneNode(true);
-
     const calendarColumnElement = calendarColumnContent.querySelector("[data-week-calendar-column]");
-
     const calendarColumnCellElements = calendarColumnElement.querySelectorAll("[data-week-calendar-cell]");
 
     const eventsWithDynamicStyles = calculateEventsDynamicStyles(events);
@@ -118,9 +131,9 @@ function initColumn(parent, weekDay, events) {
         );
     }
 
+    //Clicking on empty slots opens "Create Event" dialog.
     for (const calendarColumnCellElement of calendarColumnCellElements) {
         const cellStartTime = Number.parseInt(calendarColumnCellElement.dataset.weekCalendarCell, 10);
-
         const cellEndTime = cellStartTime + 60;
 
         calendarColumnCellElement.addEventListener("click", () => {
@@ -172,8 +185,9 @@ function calculateEventsDynamicStyles(events) {
     });
 }
 
-
 function groupEvents(events) {
+    //This fx groups overlapping events and assigns them to columns so they can sit side-by-side.
+
     if (events.length === 0) {
         return {
             eventGroups: [],
@@ -190,14 +204,18 @@ function groupEvents(events) {
         }
     ];
 
-    const eventGroups = [firstEventGroup];
+    const eventGroups = [firstEventGroup];      //The very first event always goes in column 0.
 
+
+    //Out of remaining events, find which events in this group overlap with the current loopEvent
     for (let i = 1; i < events.length; i++) {
         const lastEventGroup = eventGroups[eventGroups.length - 1];
         const loopEvent = events[i];
 
         const lastEventGroupCollidingItems = lastEventGroup.filter((eventGroupItem) => eventCollidesWith(eventGroupItem.event, loopEvent));
 
+        //If no events overlap, start a brand new group.
+        //current event sits below the previous stack and gets full width.
         if (lastEventGroupCollidingItems.length === 0) {
             const newEventGroupItem = {
                 event: loopEvent,
@@ -212,6 +230,7 @@ function groupEvents(events) {
             continue;
         }
 
+        //If the new event overlaps with all events in the group, just add it as a new column at the far right.        
         if (lastEventGroupCollidingItems.length === lastEventGroup.length) {
             const newEventGroupItem = {
                 event: loopEvent,
@@ -223,6 +242,7 @@ function groupEvents(events) {
             continue;
         }
 
+        //If it overlaps with some events but not all, find the first available free column (newColumnIndex).        
         let newColumnIndex = 0;
         while (true) {
             const isColumnIndexInUse = lastEventGroupCollidingItems.some((eventGroupItem) => eventGroupItem.columnIndex == newColumnIndex);
@@ -234,6 +254,7 @@ function groupEvents(events) {
             }
         }
 
+        //Add this new event into a new sub-group with its calculated column.
         const newEventGroupItem = {
             event: loopEvent,
             columnIndex: newColumnIndex,
@@ -252,6 +273,7 @@ function groupEvents(events) {
         eventGroups.push(newEventGroup);
     }
 
+    //Calculate the maximum number of parallel columns needed to render this day's events.
     let totalColumns = 0;
     for (const eventGroup of eventGroups) {
         for (const eventGroupItem of eventGroup) {
@@ -259,6 +281,7 @@ function groupEvents(events) {
         }
     }
 
+    //Calculate how much horizontal width each event should occupy
     for (const eventGroup of eventGroups) {
         eventGroup.sort((columnGroupItemA, columnGroupItemB) => {
             return columnGroupItemA.columnIndex < columnGroupItemB.columnIndex ? -1 : 1;
