@@ -1,11 +1,12 @@
 import { waitUntilAnimationsFinish } from "./animation.js";
 
 export function initToaster(parent) {
-    const toasterElement = document.createElement("div");
-
+    const toasterElement = document.createElement("div"); //Creates a <div> to hold all toast notifications.
     toasterElement.classList.add("toaster");
+
     parent.appendChild(toasterElement);
 
+    //Return API for showing toasts
     return {
         success(message) {
             showToast(toasterElement, message, "success");
@@ -31,11 +32,19 @@ function createToast(message, type) {
 }
 
 function animateToast(toasterElement, toastElement) {
+
+    //Measure toaster height before and after adding the toast.
+
     const heightBefore = toasterElement.offsetHeight;
     toasterElement.appendChild(toastElement);
     const heightAfter = toasterElement.offsetHeight;
-    const heightDiff = heightAfter - heightBefore;
+    const heightDiff = heightAfter - heightBefore;      //heightDiff is the vertical space the new toast occupies.
 
+    /*
+    Animate the toaster container to slide down smoothly when a new toast is added:
+    Start at translateY(heightDiff) → moves down by the new toast’s height.
+    End at translateY(0) → settles back in place.
+    */
     const toasterAnimation = toasterElement.animate([
         { transform: `translate(0, ${heightDiff}px)` },
         { transform: "translate(0,0)" }

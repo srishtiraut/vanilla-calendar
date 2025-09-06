@@ -6,7 +6,7 @@ export function initEventList(parent, events) {
     const eventListElement = parent.querySelector("[data-event-list]");
 
     eventListElement.addEventListener("click", (event) => {
-        event.stopPropagation();
+        event.stopPropagation();        //prevent further propagation of the current event in the capturing and bubbling phases
     });
 
     for (const event of events) {

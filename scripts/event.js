@@ -47,7 +47,7 @@ function initEvent(event) {
     eventStartTimeElement.textContent = dateFormatter.format(startDate);
     eventEndTimeElement.textContent = dateFormatter.format(endDate);
 
-    eventElement.addEventListener("click", ()=>{
+    eventElement.addEventListener("click", () => {
         eventElement.dispatchEvent(new CustomEvent('event-click', {
             detail: {
                 event,
@@ -97,6 +97,9 @@ export function validateEvent(event) {
 }
 
 export function adjustDynamicEventMaxLines(dynamicEventElement) {
+
+    //This fx computes how many lines of text can fit inside a dynamic event block.
+
     const availableHeight = dynamicEventElement.offsetHeight;
     const lineHeight = 16;
     const padding = 8;
@@ -105,6 +108,6 @@ export function adjustDynamicEventMaxLines(dynamicEventElement) {
     dynamicEventElement.style.setProperty("--event-title-max-lines", maxTitleLines);
 }
 
-export function generateEventId(){
+export function generateEventId() {
     return Date.now();
 }

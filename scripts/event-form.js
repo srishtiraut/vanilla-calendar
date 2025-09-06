@@ -1,7 +1,5 @@
 import { validateEvent, generateEventId } from "./event.js";
 
-
-
 export function initEventForm(toaster) {
     const formElement = document.querySelector("[data-event-form]");
 
@@ -19,7 +17,7 @@ export function initEventForm(toaster) {
             return;
         }
 
-        if(mode == "create"){
+        if (mode == "create") {
             formElement.dispatchEvent(new CustomEvent('event-create', {
                 detail: {
                     event: formEvent
@@ -28,7 +26,7 @@ export function initEventForm(toaster) {
             }));
         }
 
-        if(mode == "edit"){
+        if (mode == "edit") {
             formElement.dispatchEvent(new CustomEvent('event-edit', {
                 detail: {
                     event: formEvent
@@ -45,8 +43,8 @@ export function initEventForm(toaster) {
             mode = "create";
             fillFormWithDate(formElement, date, startTime, endTime);
         },
-        switchToEditMode(event){
-           mode = "edit";
+        switchToEditMode(event) {
+            mode = "edit";
             fillFormWithEvent(formElement, event);
         },
         reset() {
@@ -57,7 +55,7 @@ export function initEventForm(toaster) {
 }
 
 function fillFormWithDate(formElement, date, startTime, endTime) {
-
+    //This fx pre-populates the event's date and time to standard pre-decided values
     const dateInputElement = formElement.querySelector("#date");
     const startTimeSelectElement = formElement.querySelector("#start-time");
     const endTimeSelectElement = formElement.querySelector("#end-time");
@@ -68,7 +66,7 @@ function fillFormWithDate(formElement, date, startTime, endTime) {
 
 }
 
-function fillFormWithEvent(formElement, event){
+function fillFormWithEvent(formElement, event) {
     const idInputElement = formElement.querySelector("#id");
     const titleInputElement = formElement.querySelector("#title");
     const dateInputElement = formElement.querySelector("#date");
@@ -78,7 +76,7 @@ function fillFormWithEvent(formElement, event){
 
     idInputElement.value = event.id;
     titleInputElement.value = event.title;
-    dateInputElement.value = event.date.toISOString().substr(0,10);
+    dateInputElement.value = event.date.toISOString().substr(0, 10);
     startTimeInputElement.value = event.startTime;
     endTimeInputElement.value = event.endTime;
     colorInputElement.checked = true;

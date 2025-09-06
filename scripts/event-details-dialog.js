@@ -1,7 +1,7 @@
 import { initDialog } from "./dialog.js";
 import { eventTimeToDate } from "./event.js";
 
-const eventDateFormatter = new Intl.DateTimeFormat("en-US",{
+const eventDateFormatter = new Intl.DateTimeFormat("en-US", {
     weekday: 'short',
     day: 'numeric',
     month: 'long',
@@ -15,49 +15,47 @@ const eventTimeFormatter = new Intl.DateTimeFormat("en-US", {
 
 export function initEventDetailsDialog() {
     const dialog = initDialog("event-details");
-
     const deleteButtonElement = dialog.dialogElement.querySelector("[data-event-details-delete-button]");
-
     const editButtonElement = dialog.dialogElement.querySelector("[data-event-details-edit-button]");
 
     let currentEvent = null;
 
-    document.addEventListener("event-click", (event)=>{
-        currentEvent = event.detail.event;
-        fillEventDetailsDialog(dialog.dialogElement, event.detail.event);
-        dialog.open();
+    document.addEventListener("event-click", (event) => {     //event-click customEvent is created in event.js
+        currentEvent = event.detail.event;      //currentEvent is set to the clicked event’s data.
+        fillEventDetailsDialog(dialog.dialogElement, event.detail.event);   //update the dialog UI with this event's details.
+        dialog.open();          //displays the dialog on screen.
     });
 
     // event listener for delete button
-    deleteButtonElement.addEventListener("click", ()=>{
+    deleteButtonElement.addEventListener("click", () => {
         dialog
             .close()
-            .then(()=>{
+            .then(() => {
                 deleteButtonElement.dispatchEvent(new CustomEvent('event-delete-request', {
                     detail: {
                         event: currentEvent
                     },
                     bubbles: true
                 }));
-            }); 
+            });
     });
 
     //event listener for edit button
-    editButtonElement.addEventListener("click", ()=>{
+    editButtonElement.addEventListener("click", () => {
         dialog
             .close()
-            .then(()=>{
+            .then(() => {
                 editButtonElement.dispatchEvent(new CustomEvent('event-edit-request', {
                     detail: {
                         event: currentEvent
                     },
                     bubbles: true
                 }));
-            }); 
+            });
     });
 }
 
-function fillEventDetailsDialog(parent, event){
+function fillEventDetailsDialog(parent, event) {
     const eventDetailsElement = parent.querySelector("[data-event-details]");
     const eventDetailsTitleElement = parent.querySelector("[data-event-details-title]");
     const eventDetailsDateElement = parent.querySelector("[data-event-details-date]");

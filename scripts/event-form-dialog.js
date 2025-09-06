@@ -13,6 +13,8 @@ export function initEventFormDialog() {
 
     document.addEventListener("event-create-request", (event) => {
         dialogTitleElement.textContent = "Create New Event";
+
+        //prepare the form for creating a new event.
         eventForm.switchToCreateMode(
             event.detail.date,
             event.detail.startTime,
